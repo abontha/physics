@@ -44,6 +44,10 @@
             background-color: #3a0000;
         }
 
+        .dark-mode .flashing {
+            animation: flashing-border 1s infinite;
+        }
+
         /* Header Styles */
         .header {
             background: linear-gradient(90deg, #0077cc, #005fa3);
@@ -66,6 +70,11 @@
             border-radius: 5px;
             font-size: 1em;
             cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .class-switcher:hover {
+            transform: scale(1.1);
         }
 
         /* Main Layout */
@@ -93,6 +102,11 @@
             color: #333;
             font-size: 1.5em;
             cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .sidebar h2:hover {
+            transform: rotate(-5deg);
         }
 
         .sidebar ul {
@@ -171,6 +185,12 @@
             }
         }
 
+        @keyframes flashing-border {
+            0% { border-color: #ff4444; }
+            50% { border-color: #550000; }
+            100% { border-color: #ff4444; }
+        }
+
         /* Toggle Button */
         .toggle-dark-mode {
             background-color: white;
@@ -204,7 +224,7 @@
     <div class="main-container">
         <!-- Sidebar -->
         <div class="sidebar">
-            <h2 onclick="toggleSection('pdfs')">PDFs</h2>
+            <h2 onclick="toggleSection('pdfs')" id="pdfs-header">PDFs</h2>
             <ul id="pdfs" class="active">
                 <!-- PDFs for Physics -->
                 <li class="physics"><a href="TB_frq6-pages.pdf" target="viewer">TB_frq6-pages.pdf</a></li>
@@ -228,6 +248,8 @@
                 <!-- Images for APUSH -->
                 <li class="apush" style="display: none;"><a href="APUSHImage1.jpg" target="viewer">APUSH Image 1</a></li>
             </ul>
+
+            <button onclick="toggleMusic()" class="toggle-dark-mode">Toggle Music</button>
         </div>
 
         <!-- Content -->
@@ -238,13 +260,19 @@
 
     <!-- Footer -->
     <div class="footer">
-        &copy; 2024 Random Assignment Repository. Designed with ❤️ by Aadit Bontha.
+        &copy; 2024 Random Assignment Repository.
     </div>
 
     <script>
         // Dark Mode Toggle
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
+            const pdfHeader = document.getElementById('pdfs-header');
+            if (document.body.classList.contains('dark-mode')) {
+                pdfHeader.classList.add('flashing');
+            } else {
+                pdfHeader.classList.remove('flashing');
+            }
         }
 
         // Section Toggle
@@ -260,6 +288,19 @@
                 el.style.display = el.classList.contains(selectedClass) ? '' : 'none';
             });
         });
+
+        // Music Toggle
+        let musicPlaying = false;
+        const audio = new Audio('https://www.bensound.com/bensound-music/bensound-creativeminds.mp3');
+
+        function toggleMusic() {
+            if (musicPlaying) {
+                audio.pause();
+            } else {
+                audio.play();
+            }
+            musicPlaying = !musicPlaying;
+        }
     </script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Random PDF Repository</title>
+    <title>Random Assignment Repository</title>
     <style>
         /* General Page Styles */
         body {
@@ -14,6 +14,13 @@
             flex-direction: column;
             height: 100vh;
             background-color: #f7f9fc;
+            color: #333;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .dark-mode {
+            background-color: #1a1a1a;
+            color: #f0f0f0;
         }
 
         /* Header Styles */
@@ -21,11 +28,23 @@
             background: linear-gradient(90deg, #0077cc, #005fa3);
             color: white;
             padding: 15px;
-            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             font-size: 1.8em;
             font-weight: bold;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
             animation: fadeIn 1s;
+        }
+
+        .class-switcher {
+            background-color: white;
+            color: #005fa3;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
         }
 
         /* Main Layout */
@@ -52,12 +71,18 @@
             margin-bottom: 20px;
             color: #333;
             font-size: 1.5em;
+            cursor: pointer;
         }
 
         .sidebar ul {
             list-style: none;
             padding: 0;
             margin: 0;
+            display: none;
+        }
+
+        .sidebar ul.active {
+            display: block;
         }
 
         .sidebar ul li {
@@ -125,63 +150,95 @@
             }
         }
 
-        /* Color-Changing Button */
-        .color-change-btn {
-            margin: 15px 0;
-            padding: 10px 15px;
-            background-color: #0077cc;
-            color: white;
+        /* Toggle Button */
+        .toggle-dark-mode {
+            background-color: white;
+            color: #0077cc;
             border: none;
+            padding: 10px;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s;
-            font-size: 0.9em;
-            display: block;
-            width: 100%;
-            text-align: center;
+            font-size: 1em;
         }
 
-        .color-change-btn:hover {
-            background-color: #005fa3;
+        .toggle-dark-mode:hover {
+            background-color: #f4f4f4;
         }
     </style>
 </head>
 <body>
     <!-- Header -->
     <div class="header">
-        Random PDF Repository
+        <span>Random Assignment Repository</span>
+        <div>
+            <select class="class-switcher" id="class-switcher">
+                <option value="physics">Physics</option>
+                <option value="apush">APUSH</option>
+            </select>
+            <button class="toggle-dark-mode" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+        </div>
     </div>
 
     <!-- Main Container -->
     <div class="main-container">
         <!-- Sidebar -->
         <div class="sidebar">
-            <h2>PDFs</h2>
-            <ul>
-                <li><a href="TB_frq6-pages.pdf" target="viewer">TB_frq6-pages.pdf</a></li>
-                <li><a href="PhysicsTestBoomorDoom-pages.pdf" target="viewer">PhysicsTestBoomorDoom-pages.pdf</a></li>
-                <!-- Add more PDFs here -->
+            <h2 onclick="toggleSection('pdfs')">PDFs</h2>
+            <ul id="pdfs" class="active">
+                <!-- PDFs for Physics -->
+                <li class="physics"><a href="TB_frq6-pages.pdf" target="viewer">TB_frq6-pages.pdf</a></li>
+                <li class="physics"><a href="PhysicsTestBoomorDoom-pages.pdf" target="viewer">PhysicsTestBoomorDoom-pages.pdf</a></li>
+                <!-- PDFs for APUSH -->
+                <li class="apush" style="display: none;"><a href="APUSH_Assignment1.pdf" target="viewer">APUSH Assignment 1</a></li>
             </ul>
-            <button class="color-change-btn" onclick="changeColor()">Change Sidebar Color</button>
+
+            <h2 onclick="toggleSection('urls')">URLs</h2>
+            <ul id="urls">
+                <!-- URLs for Physics -->
+                <li class="physics"><a href="https://example.com/physics">Physics Resource</a></li>
+                <!-- URLs for APUSH -->
+                <li class="apush" style="display: none;"><a href="https://example.com/apush">APUSH Resource</a></li>
+            </ul>
+
+            <h2 onclick="toggleSection('images')">Images</h2>
+            <ul id="images">
+                <!-- Images for Physics -->
+                <li class="physics"><a href="PhysicsImage1.jpg" target="viewer">Physics Image 1</a></li>
+                <!-- Images for APUSH -->
+                <li class="apush" style="display: none;"><a href="APUSHImage1.jpg" target="viewer">APUSH Image 1</a></li>
+            </ul>
         </div>
 
         <!-- Content -->
         <div class="content">
-            <iframe name="viewer" src="TB_frq6-pages.pdf"></iframe>
+            <iframe name="viewer"></iframe>
         </div>
     </div>
 
     <!-- Footer -->
     <div class="footer">
-        &copy; 2024 Random PDF Repository. Designed with ❤️ by Aadit Bontha.
+        &copy; 2024 Random Assignment Repository. Designed with ❤️ by Aadit Bontha.
     </div>
 
     <script>
-        function changeColor() {
-            const colors = ['#f4f4f4', '#ffe4b2', '#d1ffd6', '#e9f3fc'];
-            const randomColor = colors[Math.floor(Math.random() * colors.length)];
-            document.querySelector('.sidebar').style.backgroundColor = randomColor;
+        // Dark Mode Toggle
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
         }
+
+        // Section Toggle
+        function toggleSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            section.classList.toggle('active');
+        }
+
+        // Class Switcher
+        document.getElementById('class-switcher').addEventListener('change', (event) => {
+            const selectedClass = event.target.value;
+            document.querySelectorAll('.physics, .apush').forEach(el => {
+                el.style.display = el.classList.contains(selectedClass) ? '' : 'none';
+            });
+        });
     </script>
 </body>
 </html>

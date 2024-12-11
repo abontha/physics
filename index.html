@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Random Assignment Repository</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* General Page Styles */
+        /* General Styles */
         body {
             font-family: 'Roboto', Arial, sans-serif;
             margin: 0;
@@ -23,31 +24,6 @@
             color: #ff4444;
         }
 
-        .dark-mode .header {
-            background: linear-gradient(90deg, #3a0000, #550000);
-        }
-
-        .dark-mode .sidebar {
-            background-color: #2a2a2a;
-        }
-
-        .dark-mode .sidebar ul li a {
-            color: #ff4444;
-            background-color: #333333;
-        }
-
-        .dark-mode .sidebar ul li a:hover {
-            background-color: #550000;
-        }
-
-        .dark-mode .footer {
-            background-color: #3a0000;
-        }
-
-        .dark-mode .flashing {
-            animation: flashing-border 1s infinite;
-        }
-
         /* Header Styles */
         .header {
             background: linear-gradient(90deg, #0077cc, #005fa3);
@@ -59,22 +35,34 @@
             font-size: 1.8em;
             font-weight: bold;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            animation: fadeIn 1s;
         }
 
-        .class-switcher {
-            background-color: white;
-            color: #005fa3;
-            padding: 10px;
+        .dark-mode .header {
+            background: linear-gradient(90deg, #3a0000, #550000);
+        }
+
+        /* Toggle Buttons */
+        .toggle-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .class-switcher, .toggle-dark-mode, .search-btn {
+            padding: 10px 15px;
             border: none;
             border-radius: 5px;
             font-size: 1em;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: transform 0.2s, background-color 0.3s;
         }
 
-        .class-switcher:hover {
+        .class-switcher:hover, .toggle-dark-mode:hover, .search-btn:hover {
             transform: scale(1.1);
+        }
+
+        .dark-mode .class-switcher, .dark-mode .toggle-dark-mode, .dark-mode .search-btn {
+            background-color: #333333;
+            color: #ff4444;
         }
 
         /* Main Layout */
@@ -92,8 +80,10 @@
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
             overflow-y: auto;
             height: 100%;
-            transition: background-color 0.3s ease;
-            animation: slideInLeft 1s;
+        }
+
+        .dark-mode .sidebar {
+            background-color: #2a2a2a;
         }
 
         .sidebar h2 {
@@ -102,11 +92,9 @@
             color: #333;
             font-size: 1.5em;
             cursor: pointer;
-            transition: transform 0.3s, color 0.3s;
         }
 
-        .sidebar h2:hover {
-            transform: rotate(-5deg) scale(1.1);
+        .dark-mode .sidebar h2 {
             color: #ff4444;
         }
 
@@ -115,6 +103,7 @@
             padding: 0;
             margin: 0;
             display: none;
+            transition: all 0.3s ease;
         }
 
         .sidebar ul.active {
@@ -132,22 +121,27 @@
             display: block;
             border-radius: 8px;
             background-color: #e9f3fc;
-            transition: background-color 0.2s, color 0.2s;
-            font-weight: bold;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .sidebar ul li a:hover {
             background-color: #0077cc;
             color: white;
-            transform: scale(1.1);
+        }
+
+        .dark-mode .sidebar ul li a {
+            color: #ff4444;
+            background-color: #333333;
+        }
+
+        .dark-mode .sidebar ul li a:hover {
+            background-color: #550000;
         }
 
         /* Content Styles */
         .content {
             flex-grow: 1;
             padding: 20px;
-            overflow: hidden;
-            animation: fadeIn 1.5s;
         }
 
         iframe {
@@ -166,69 +160,25 @@
             padding: 10px 0;
             font-size: 0.9em;
             box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
         }
 
-        /* Animations */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        @keyframes slideInLeft {
-            from {
-                transform: translateX(-100%);
-            }
-            to {
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes flashing-border {
-            0% { border-color: #ff4444; }
-            50% { border-color: #550000; }
-            100% { border-color: #ff4444; }
-        }
-
-        @keyframes bounce {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-        }
-
-        /* Toggle Button */
-        .toggle-dark-mode {
-            background-color: white;
-            color: #0077cc;
-            border: none;
-            padding: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1em;
-            animation: bounce 2s infinite;
-        }
-
-        .toggle-dark-mode:hover {
-            background-color: #f4f4f4;
+        .dark-mode .footer {
+            background-color: #3a0000;
         }
     </style>
 </head>
 <body>
     <!-- Header -->
     <div class="header">
-        <span>Random Assignment Repository</span>
-        <div>
+        <span id="header-title">Random Assignment Repository</span>
+        <div class="toggle-buttons">
             <select class="class-switcher" id="class-switcher">
                 <option value="physics">Physics</option>
                 <option value="apush">APUSH</option>
             </select>
             <button class="toggle-dark-mode" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+            <button class="search-btn" onclick="searchFiles()">Search</button>
         </div>
     </div>
 
@@ -238,30 +188,16 @@
         <div class="sidebar">
             <h2 onclick="toggleSection('pdfs')" id="pdfs-header">PDFs</h2>
             <ul id="pdfs" class="active">
-                <!-- PDFs for Physics -->
                 <li class="physics"><a href="TB_frq6-pages.pdf" target="viewer">TB_frq6-pages.pdf</a></li>
                 <li class="physics"><a href="PhysicsTestBoomorDoom-pages.pdf" target="viewer">PhysicsTestBoomorDoom-pages.pdf</a></li>
-                <!-- PDFs for APUSH -->
                 <li class="apush" style="display: none;"><a href="APUSH_Assignment1.pdf" target="viewer">APUSH Assignment 1</a></li>
             </ul>
-
-            <h2 onclick="toggleSection('urls')">URLs</h2>
-            <ul id="urls">
-                <!-- URLs for Physics -->
-                <li class="physics"><a href="https://example.com/physics">Physics Resource</a></li>
-                <!-- URLs for APUSH -->
-                <li class="apush" style="display: none;"><a href="https://example.com/apush">APUSH Resource</a></li>
+            <h2 onclick="toggleSection('resources')" id="resources-header">Resources</h2>
+            <ul id="resources">
+                <li><a href="https://www.khanacademy.org" target="_blank">Khan Academy</a></li>
+                <li><a href="https://www.physicsclassroom.com" target="_blank">Physics Classroom</a></li>
+                <li><a href="https://www.history.com" target="_blank">History.com</a></li>
             </ul>
-
-            <h2 onclick="toggleSection('images')">Images</h2>
-            <ul id="images">
-                <!-- Images for Physics -->
-                <li class="physics"><a href="PhysicsImage1.jpg" target="viewer">Physics Image 1</a></li>
-                <!-- Images for APUSH -->
-                <li class="apush" style="display: none;"><a href="APUSHImage1.jpg" target="viewer">APUSH Image 1</a></li>
-            </ul>
-
-            <button onclick="toggleMusic()" class="toggle-dark-mode">Toggle Music</button>
         </div>
 
         <!-- Content -->
@@ -272,19 +208,14 @@
 
     <!-- Footer -->
     <div class="footer">
-        &copy; 2024 Random Assignment Repository.
+        &copy; 2024 Random Assignment Repository | Powered by Students
     </div>
 
     <script>
         // Dark Mode Toggle
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
-            const pdfHeader = document.getElementById('pdfs-header');
-            if (document.body.classList.contains('dark-mode')) {
-                pdfHeader.classList.add('flashing');
-            } else {
-                pdfHeader.classList.remove('flashing');
-            }
+            localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
         }
 
         // Section Toggle
@@ -296,22 +227,20 @@
         // Class Switcher
         document.getElementById('class-switcher').addEventListener('change', (event) => {
             const selectedClass = event.target.value;
+            document.getElementById('header-title').textContent = `${selectedClass.toUpperCase()} Repository`;
             document.querySelectorAll('.physics, .apush').forEach(el => {
                 el.style.display = el.classList.contains(selectedClass) ? '' : 'none';
             });
         });
 
-        // Music Toggle
-        let musicPlaying = false;
-        const audio = new Audio('https://www.bensound.com/bensound-music/bensound-creativeminds.mp3');
+        // File Search (Example feature placeholder)
+        function searchFiles() {
+            alert("Search feature coming soon!");
+        }
 
-        function toggleMusic() {
-            if (musicPlaying) {
-                audio.pause();
-            } else {
-                audio.play();
-            }
-            musicPlaying = !musicPlaying;
+        // Dark Mode Persistence
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
         }
     </script>
 </body>
